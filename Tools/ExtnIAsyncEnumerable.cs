@@ -3,25 +3,25 @@ using System.Runtime.CompilerServices;
 namespace Tsinswreng.CsCore.Tools;
 
 public static class ExtnIEnumerable{
-	[Obsolete("用Linq Select")]
-	public static IEnumerable<TDst> Convert<TSrc, TDst>(
-		this IEnumerable<TSrc> Src
-		,Func<TSrc, TDst> FnConv
-	){
-		foreach(var item in Src){
-			yield return FnConv(item);
-		}
-	}
+	// [Obsolete("用Linq Select")]
+	// public static IEnumerable<TDst> Convert<TSrc, TDst>(
+	// 	this IEnumerable<TSrc> Src
+	// 	,Func<TSrc, TDst> FnConv
+	// ){
+	// 	foreach(var item in Src){
+	// 		yield return FnConv(item);
+	// 	}
+	// }
 
-	[Obsolete("用Linq Select")]
-	public static async IAsyncEnumerable<TDst> Convert<TSrc, TDst>(
-		this IAsyncEnumerable<TSrc> Src
-		,Func<TSrc, TDst> FnConv
-	){
-		await foreach(var item in Src){
-			yield return FnConv(item);
-		}
-	}
+	// [Obsolete("用Linq Select")]
+	// public static async IAsyncEnumerable<TDst> Convert<TSrc, TDst>(
+	// 	this IAsyncEnumerable<TSrc> Src
+	// 	,Func<TSrc, TDst> FnConv
+	// ){
+	// 	await foreach(var item in Src){
+	// 		yield return FnConv(item);
+	// 	}
+	// }
 
 	public static async IAsyncEnumerable<T> FlattenAsync<T>(
 		this IAsyncEnumerable<Task<T>> z,
@@ -32,7 +32,7 @@ public static class ExtnIEnumerable{
 		}
 	}
 
-	
+
 
 /// <summary>
 /// 支持倒數

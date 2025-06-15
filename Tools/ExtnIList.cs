@@ -48,5 +48,17 @@ public static class ExtnIList{
 		return R;
 	}
 
+	public static IList<T> FillUpTo<T>(
+		this IList<T> z
+		,u64 TotalCount
+		,T Value
+	){
+		for(u64 i = (u64)z.Count; i < TotalCount; i++){
+			z.Add(Value);
+		}
+		return z;
+	}
+
+
 
 }
