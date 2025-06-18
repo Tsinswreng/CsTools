@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="../Tsinswreng.CsTypeAlias/TypeAlias.cs" />
+		<!-- <Compile Include="../Tsinswreng.CsTypeAlias/TypeAlias.cs" /> -->
 	</ItemGroup>
 
 </Project>
