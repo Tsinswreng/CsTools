@@ -13,4 +13,3 @@ public interface I_ShallowCloneSelf{
 	;
 #endif
 }
-

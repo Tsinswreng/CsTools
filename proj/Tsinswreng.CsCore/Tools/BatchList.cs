@@ -10,7 +10,8 @@ namespace Tsinswreng.CsCore.Tools;
 /// <typeparam name="TItem"></typeparam>
 /// <typeparam name="TRet"></typeparam>
 public class BatchListAsy<TItem, TRet>
-	:IDisposable
+	//:IDisposable
+	:IAsyncDisposable
 {
 	public BatchListAsy(Func<
 			IEnumerable<TItem>
@@ -113,12 +114,16 @@ public class BatchListAsy<TItem, TRet>
 		return Ans;
 	}
 
-
+	[Obsolete]
 	public void Dispose(){
 		if(!_IsEnd){
 			End(default).Wait();
 		}
 	}
 
-
+	public async ValueTask DisposeAsync() {
+		if(!_IsEnd){
+			await End(default);
+		}
+	}
 }
