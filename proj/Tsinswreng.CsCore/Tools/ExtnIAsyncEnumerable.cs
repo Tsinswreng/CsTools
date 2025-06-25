@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Tsinswreng.CsCore.Tools;
+namespace Tsinswreng.CsTools.Tools;
 
 public static class ExtnIEnumerable{
 	// [Obsolete("用Linq Select")]

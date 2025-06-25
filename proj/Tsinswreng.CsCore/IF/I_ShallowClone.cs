@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsCore.IF;
+namespace Tsinswreng.CsTools.IF;
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;

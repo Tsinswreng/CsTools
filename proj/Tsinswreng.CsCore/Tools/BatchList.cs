@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace Tsinswreng.CsCore.Tools;
+namespace Tsinswreng.CsTools.Tools;
 
 
 /// <summary>

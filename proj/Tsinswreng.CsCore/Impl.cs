@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsCore;
+namespace Tsinswreng.CsTools;
 
 [AttributeUsage(AttributeTargets.All)]
 public class Impl : Attribute{

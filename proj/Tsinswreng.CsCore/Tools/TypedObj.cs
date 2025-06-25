@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsCore.Tools;
+namespace Tsinswreng.CsTools.Tools;
 
 // public interface ITypedObj:IDisposable{
 // 	public Type? Type{get;set;}

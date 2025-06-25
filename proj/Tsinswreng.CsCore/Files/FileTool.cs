@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsCore.Files;
+namespace Tsinswreng.CsTools.Files;
 
 public class FileTool {
 	public static void EnsureFile(string filePath) {

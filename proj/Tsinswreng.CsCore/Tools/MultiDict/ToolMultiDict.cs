@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsCore.Tools.MultiDict;
+namespace Tsinswreng.CsTools.Tools.MultiDict;
 
 
 public static class ExtnMultiDict{
