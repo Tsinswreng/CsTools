@@ -114,7 +114,7 @@ public class BatchListAsy<TItem, TRet>
 		return Ans;
 	}
 
-	[Obsolete]
+	[Obsolete("Use DisposeAsync")]
 	public void Dispose(){
 		if(!_IsEnd){
 			End(default).Wait();

@@ -41,12 +41,14 @@ public static class ExtnIList{
 		}
 	}
 
-	public static IEnumerable<(T, i32)> IPairs<T>(
-		this IEnumerable<T> z
-	){
-		var R = z.Select((item, i)=>(item,i));
-		return R;
-	}
+
+	// [Obsolete("用.net9之Index()")]
+	// public static IEnumerable<(T, i32)> VIPair<T>(
+	// 	this IEnumerable<T> z
+	// ){
+	// 	var R = z.Select((item, i)=>(item,i));
+	// 	return R;
+	// }
 
 	public static IList<T> FillUpTo<T>(
 		this IList<T> z
