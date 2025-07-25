@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Tsinswreng.CsTools.Tools;
+namespace Tsinswreng.CsTools;
 
 public static class ExtnIList{
 	public static void AddRange<T>(this IList<T> list, IEnumerable<T> items) {

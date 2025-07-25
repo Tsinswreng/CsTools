@@ -1,4 +1,4 @@
-namespace Tsinswreng.CsTools.Tools;
+namespace Tsinswreng.CsTools;
 
 using System;
 using System.Collections.Generic;

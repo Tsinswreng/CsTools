@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Tsinswreng.CsTools.Tools;
+namespace Tsinswreng.CsTools;
 
 public static class ExtnIEnumerable{
 	// [Obsolete("用Linq Select")]
@@ -25,7 +25,7 @@ public static class ExtnIEnumerable{
 
 	public static async IAsyncEnumerable<T> FlattenAsync<T>(
 		this IAsyncEnumerable<Task<T>> z,
-		[EnumeratorCancellation] CancellationToken Ct = default
+		[EnumeratorCancellation] CT Ct = default
 	){
 		await foreach (var task in z.WithCancellation(Ct)){
 			yield return await task.ConfigureAwait(false);
