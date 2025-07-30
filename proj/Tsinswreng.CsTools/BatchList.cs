@@ -7,7 +7,7 @@ namespace Tsinswreng.CsTools;
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 /// <typeparam name="TRet"></typeparam>
-public class BatchListAsy<TItem, TRet>
+public  partial class BatchListAsy<TItem, TRet>
 	//:IDisposable
 	:IAsyncDisposable
 {

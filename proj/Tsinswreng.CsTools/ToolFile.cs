@@ -1,6 +1,6 @@
 namespace Tsinswreng.CsTools;
 
-public class ToolFile {
+public  partial class ToolFile {
 	public static void EnsureFile(string filePath) {
 		if (string.IsNullOrWhiteSpace(filePath)){
 			return;

@@ -1,6 +1,6 @@
 namespace Tsinswreng.CsTools;
 
-// public interface ITypedObj:IDisposable{
+// public  partial interface ITypedObj:IDisposable{
 // 	public Type? Type{get;set;}
 // 	//用戶自定義
 // 	public long TypeCode{get;set;}
@@ -14,7 +14,7 @@ namespace Tsinswreng.CsTools;
 // 	}
 // }
 
-public interface ITypedObj{
+public  partial interface ITypedObj{
 	public Type? Type{get;set;}
 	//用戶自定義
 	public long TypeCode{get;set;}
@@ -29,7 +29,7 @@ public interface ITypedObj{
 	// }
 }
 
-public struct TypedObj:ITypedObj{
+public  partial struct TypedObj:ITypedObj{
 	public Type? Type{get;set;}
 	//用戶自定義
 	public long TypeCode{get;set;}

@@ -1,6 +1,6 @@
 namespace Tsinswreng.CsTools;
 
-public class ToolPath {
+public  partial class ToolPath {
 	/// <summary>
 	/// ["a", "b", "c"] => "a/b/c"
 	/// ["a/", "b", "c/"] => "a/b/c"
