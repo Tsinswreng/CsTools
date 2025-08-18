@@ -2,7 +2,7 @@ namespace Tsinswreng.CsTools;
 using System.Buffers.Binary;
 public static class ToolUInt128{
 
-public static string ToBase64Url(UInt128 value) {
+	public static string ToBase64Url(UInt128 value) {
 		// // 拆分为高64位（upper）和低64位（lower）
 		// ulong upper = (ulong)(value >> 64);
 		// ulong lower = (ulong)value;
@@ -48,27 +48,55 @@ public static string ToBase64Url(UInt128 value) {
 	}
 
 	public static UInt128 ByteArrToUInt128(u8[] bytes){
+		return BytesToUInt128(bytes.AsSpan());
+	}
+
+	public static UInt128 BytesToUInt128(Span<u8> bytes){
 		if (bytes.Length != 16){
 			throw new ArgumentException("Invalid byte length for UInt128");
 		}
-
 		// 大端序读取：前8字节为upper，后8字节为lower
-		ulong upper = BinaryPrimitives.ReadUInt64BigEndian(bytes.AsSpan(0, 8));
-		ulong lower = BinaryPrimitives.ReadUInt64BigEndian(bytes.AsSpan(8, 8));
+		ulong upper = BinaryPrimitives.ReadUInt64BigEndian(bytes.Slice(0, 8));
+		ulong lower = BinaryPrimitives.ReadUInt64BigEndian(bytes.Slice(8, 8));
 		return (UInt128)upper << 64 | lower;
 	}
 
 	public static u8[] ToByteArr(this UInt128 value){
+		var R = new u8[16];
+		var span = R.AsSpan();
+		ToByteSpan(value, ref span);
+		return R;
+	}
+
+	/// <summary>
+	/// 高位在前
+	/// </summary>
+	public static nil ToByteSpan(
+		this UInt128 value
+		,ref Span<u8> R
+	){
 		// 拆分为高64位（upper）和低64位（lower）
 		ulong upper = (ulong)(value >> 64);
 		ulong lower = (ulong)value;
 
 		// 大端序写入：先upper后lower
-		byte[] bytes = new byte[16];
-		BinaryPrimitives.WriteUInt64BigEndian(bytes.AsSpan(0, 8), upper);  // 高64位在前
-		BinaryPrimitives.WriteUInt64BigEndian(bytes.AsSpan(8, 8), lower);  // 低64位在后
-		return bytes;
+		BinaryPrimitives.WriteUInt64BigEndian(R.Slice(0, 8), upper);  // 高64位在前
+		BinaryPrimitives.WriteUInt64BigEndian(R.Slice(8, 8), lower);  // 高64位在前8, 8), lower);  // 低64位在后
+		return NIL;
 	}
+
+	/// <summary>
+	/// 高位在前
+	/// </summary>
+	public static Span<u8> ToByteSpan(
+		this UInt128 value
+	){
+		Span<u8> R = new u8[16];
+		ToByteSpan(value, ref R);
+		return R;
+	}
+
+
 
 	// public static str ToBase64LittleEnd(UInt128 num){
 	// 	var len = 22;
@@ -140,7 +168,6 @@ public static string ToBase64Url(UInt128 value) {
 		}
 		return ans;
 	}
-
 }
 
 /// <summary>
