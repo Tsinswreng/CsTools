@@ -3,18 +3,7 @@ using System.Buffers.Binary;
 public static class ToolUInt128{
 
 	public static string ToBase64Url(UInt128 value) {
-		// // 拆分为高64位（upper）和低64位（lower）
-		// ulong upper = (ulong)(value >> 64);
-		// ulong lower = (ulong)value;
-
-		// // 大端序写入：先upper后lower
-		// byte[] bytes = new byte[16];
-		// BinaryPrimitives.WriteUInt64BigEndian(bytes.AsSpan(0, 8), upper);  // 高64位在前
-		// BinaryPrimitives.WriteUInt64BigEndian(bytes.AsSpan(8, 8), lower);  // 低64位在后
-
 		var bytes = ToByteArr(value);
-
-		// 转换为Base64Url
 		string base64 = Convert.ToBase64String(bytes);
 		return base64.TrimEnd('=')
 			.Replace('+', '-')
@@ -32,18 +21,7 @@ public static class ToolUInt128{
 			case 3: base64 += "="; break;
 		}
 
-		//解码为字节数组
 		byte[] bytes = Convert.FromBase64String(base64);
-		// if (bytes.Length != 16){
-		// 	throw new ArgumentException("Invalid byte length for UInt128");
-		// }
-
-
-		// // 大端序读取：前8字节为upper，后8字节为lower
-		// ulong upper = BinaryPrimitives.ReadUInt64BigEndian(bytes.AsSpan(0, 8));
-		// ulong lower = BinaryPrimitives.ReadUInt64BigEndian(bytes.AsSpan(8, 8));
-
-		// return (UInt128)upper << 64 | lower;
 		return ByteArrToUInt128(bytes);
 	}
 
@@ -51,11 +29,17 @@ public static class ToolUInt128{
 		return BytesToUInt128(bytes.AsSpan());
 	}
 
+/// <summary>
+/// 大端序读取：前8字节为upper，后8字节为lower
+/// </summary>
+/// <param name="bytes"></param>
+/// <returns></returns>
+/// <exception cref="ArgumentException"></exception>
 	public static UInt128 BytesToUInt128(Span<u8> bytes){
 		if (bytes.Length != 16){
 			throw new ArgumentException("Invalid byte length for UInt128");
 		}
-		// 大端序读取：前8字节为upper，后8字节为lower
+
 		ulong upper = BinaryPrimitives.ReadUInt64BigEndian(bytes.Slice(0, 8));
 		ulong lower = BinaryPrimitives.ReadUInt64BigEndian(bytes.Slice(8, 8));
 		return (UInt128)upper << 64 | lower;
@@ -95,36 +79,6 @@ public static class ToolUInt128{
 		ToByteSpan(value, ref R);
 		return R;
 	}
-
-
-
-	// public static str ToBase64LittleEnd(UInt128 num){
-	// 	var len = 22;
-	// 	var chars_littleToBig = new u8[len];
-	// 	for(var i = 0;;i++){
-	// 		var bit6 = (u8)(num & 63);
-	// 		var c = Base64LittleEnd.Num_Char[bit6];
-	// 		chars_littleToBig[i] = c;
-	// 		num >>= 6;
-	// 		if(num == 0){
-	// 			len = i + 1;
-	// 			break;
-	// 		}
-	// 	}
-
-	// 	var chars_bigToLittle = new char[len];
-	// 	for(var i = 0; i < len; i++){
-	// 		var big = chars_littleToBig[len - 1 - i];
-	// 		// u8 lastBig = 0;
-	// 		// if(big == '0'){
-	// 		// 	continue;
-	// 		// }
-	// 		chars_bigToLittle[i] = (char)big;
-	// 	}
-	// 	var str = new str(chars_bigToLittle);
-
-	// 	return str;
-	// }
 
 /// <summary>
 /// UInt128轉64進制(不是base64)字串
