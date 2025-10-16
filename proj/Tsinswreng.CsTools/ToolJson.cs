@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 public static class ToolJson {
-	public static IDictionary<string, object?>? JsonStrToDict(string? json) {
+	public static IDictionary<str, obj?>? JsonStrToDict(str? json) {
 		if(str.IsNullOrEmpty(json)){
 			return null;
 		}
@@ -24,8 +24,8 @@ public static class ToolJson {
 		return JsonElementToDict(root);
 	}
 
-	private static IDictionary<string, object?> JsonElementToDict(JsonElement element) {
-		var dict = new Dictionary<string, object?>();
+	private static IDictionary<str, obj?> JsonElementToDict(JsonElement element) {
+		var dict = new Dictionary<str, obj?>();
 
 		foreach (var property in element.EnumerateObject()) {
 			dict[property.Name] = ParseJsonElement(property.Value);
@@ -33,7 +33,7 @@ public static class ToolJson {
 		return dict;
 	}
 
-	public static object? ParseJsonElement(JsonElement element) {
+	public static obj? ParseJsonElement(JsonElement element) {
 		switch (element.ValueKind) {
 			case JsonValueKind.Null:
 			case JsonValueKind.Undefined:
@@ -59,7 +59,7 @@ public static class ToolJson {
 				return JsonElementToDict(element);
 
 			case JsonValueKind.Array:
-				var list = new List<object?>();
+				var list = new List<obj?>();
 				foreach (var item in element.EnumerateArray()) {
 					list.Add(ParseJsonElement(item));
 				}
@@ -72,15 +72,15 @@ public static class ToolJson {
 	}
 
 	/// <summary>
-	/// 将嵌套的IDictionary<string, object?>或IEnumerable<object?>递归序列化为JSON字符串，兼容AOT编译。
+	/// 将嵌套的IDictionary<str, obj?>或IEnumerable<obj?>递归序列化为JSON字符串，兼容AOT编译。
 	/// </summary>
-	public static str CollectionToJson(IDictionary<str, obj?> Dict){
+	public static str DictToJson(IDictionary<str, obj?> Dict){
 		return ObjCollectionToJson(Dict);
 	}
-	public static str CollectionToJson(IEnumerable IEnumrb){
+	public static str EnumrbToJson(IEnumerable IEnumrb){
 		return ObjCollectionToJson(IEnumrb);
 	}
-	static string ObjCollectionToJson(object? obj){
+	static str ObjCollectionToJson(obj? obj){
 		using var stream = new System.IO.MemoryStream();
 		using (var writer = new Utf8JsonWriter(stream)){
 			WriteJsonValue(writer, obj);
@@ -88,11 +88,11 @@ public static class ToolJson {
 		return System.Text.Encoding.UTF8.GetString(stream.ToArray());
 	}
 
-	private static void WriteJsonValue(Utf8JsonWriter writer, object? value){
+	private static void WriteJsonValue(Utf8JsonWriter writer, obj? value){
 		if (value == null){
 			writer.WriteNullValue();
 		}
-		else if (value is string s){
+		else if (value is str s){
 			writer.WriteStringValue(s);
 		}
 		else if (value is bool b){
@@ -110,7 +110,7 @@ public static class ToolJson {
 		else if (value is float f){
 			writer.WriteNumberValue(f);
 		}
-		else if (value is IDictionary<string, object?> dict){
+		else if (value is IDictionary<str, obj?> dict){
 			writer.WriteStartObject();
 			foreach (var kv in dict){
 				writer.WritePropertyName(kv.Key);
@@ -118,7 +118,7 @@ public static class ToolJson {
 			}
 			writer.WriteEndObject();
 		}
-		else if (value is IEnumerable list && !(value is string)){
+		else if (value is IEnumerable list && !(value is str)){
 			writer.WriteStartArray();
 			foreach (var item in list){
 				WriteJsonValue(writer, item);

@@ -118,6 +118,9 @@ public static class ToolUInt128{
 		for(var i = 0; i < base64LittleEnd.Length; i++){
 			var c = (u8)base64LittleEnd[i];
 			var bit6 = Low64Base.Char_Num[c];
+			if(bit6 > 63){
+				throw new ArgumentException($"Invalid character in base64 string: {c} at index {i}");
+			}
 			ans = (ans << 6) | bit6;
 		}
 		return ans;

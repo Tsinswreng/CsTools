@@ -23,13 +23,17 @@ public static class ExtnIEnumerable{
 	// 	}
 	// }
 
-	public static async IAsyncEnumerable<T> FlattenAsync<T>(
+	public static async IAsyncEnumerable<T> FlatAsync<T>(
 		this IAsyncEnumerable<Task<T>> z,
 		[EnumeratorCancellation] CT Ct = default
 	){
 		await foreach (var task in z.WithCancellation(Ct)){
 			yield return await task.ConfigureAwait(false);
 		}
+	}
+
+	public static async IAsyncEnumerable<T> EmptyAsyE<T>(){
+		yield break;   // 什么都不 yield，直接结束
 	}
 
 

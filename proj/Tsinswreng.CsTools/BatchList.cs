@@ -3,18 +3,19 @@ namespace Tsinswreng.CsTools;
 
 
 /// <summary>
-/// 非線程安全
+/// 恐非線程安全
+/// 攢夠定ʹ量ʹ批次ⁿ後發
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 /// <typeparam name="TRet"></typeparam>
-public  partial class BatchListAsy<TItem, TRet>
+public partial class BatchListAsy<TItem, TRet>
 	//:IDisposable
 	:IAsyncDisposable
 {
 	public BatchListAsy(Func<
 			IEnumerable<TItem>
-			, CT
-			, Task<TRet>
+			,CT
+			,Task<TRet>
 		> FnAsy
 		,u64 BatchSize = 0xfff
 	){
@@ -31,13 +32,13 @@ public  partial class BatchListAsy<TItem, TRet>
 	> FnAsy{get;set;}
 
 	public async Task<TRet?> Add(
-		TItem item
-		, CT ct
+		TItem Item
+		,CT Ct
 	){
-		UnHandledList.Add(item);
+		UnHandledList.Add(Item);
 		//FullList.Add(item);
 		if((u64)UnHandledList.Count >= BatchSize){
-			var Ans = await Run(ct);
+			var Ans = await Run(Ct);
 			return Ans;
 		}
 		return default;
@@ -89,11 +90,11 @@ public  partial class BatchListAsy<TItem, TRet>
 
 	bool _IsEnd{get;set;} = false;
 	public async Task<TRet?> End(
-		CT ct
+		CT Ct
 	){
 		if(_IsEnd){return default;}
 		if((u64)UnHandledList.Count > 0){
-			return await Run(ct);
+			return await Run(Ct);
 		}
 		_IsEnd = true;
 		return default;
@@ -105,9 +106,9 @@ public  partial class BatchListAsy<TItem, TRet>
 	}
 
 	protected async Task<TRet?> Run(
-		CT ct
+		CT Ct
 	){
-		var Ans = await FnAsy(UnHandledList, ct);
+		var Ans = await FnAsy(UnHandledList, Ct);
 		Clear();
 		return Ans;
 	}

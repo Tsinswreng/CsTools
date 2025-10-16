@@ -82,4 +82,13 @@ public static class ExtnIList{
 		}
 		return R;
 	}
+
+	public static IList<T> ToListTryNoCopy<T>(
+		this IEnumerable<T> z
+	){
+		if(z is IList<T> list){
+			return list;
+		}
+		return new List<T>(z);
+	}
 }
