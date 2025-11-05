@@ -51,7 +51,7 @@ public partial class BatchListAsy<TItem, TRet>
 /// <param name="OnRet">返匪0旹break</param>
 /// <param name="Ct"></param>
 /// <returns></returns>
-	public async Task<nil> AddMany(
+	public async Task<nil> AddRange(
 		IEnumerable<TItem> items
 		,Func<TRet?, i32>? OnRet
 		,CT Ct
@@ -74,7 +74,7 @@ public partial class BatchListAsy<TItem, TRet>
 /// <param name="items"></param>
 /// <param name="Ct"></param>
 /// <returns></returns>
-	public async IAsyncEnumerable<TRet?> AddRangeAsy(
+	public async IAsyncEnumerable<TRet?> AddRangeAsyE(
 		IEnumerable<TItem> items
 		,[EnumeratorCancellation] CT Ct
 	){

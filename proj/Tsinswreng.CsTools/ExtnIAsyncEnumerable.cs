@@ -38,6 +38,7 @@ public static class ExtnIEnumerable{
 
 
 
+
 /// <summary>
 /// 支持倒數
 /// </summary>
