@@ -8,12 +8,12 @@ namespace Tsinswreng.CsTools;
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
 /// <typeparam name="TRet"></typeparam>
-public partial class BatchListAsy<TItem, TRet>
+public partial class BatchCollector<TItem, TRet>
 	//:IDisposable
 	:IAsyncDisposable
 {
-	public BatchListAsy(Func<
-			IEnumerable<TItem>
+	public BatchCollector(Func<
+			IList<TItem>
 			,CT
 			,Task<TRet>
 		> FnAsy
@@ -26,7 +26,7 @@ public partial class BatchListAsy<TItem, TRet>
 	public IList<TItem> UnHandledList{get;set;} = new List<TItem>();
 	public u64 BatchSize{get;set;} = 0xfff;
 	public Func<
-		IEnumerable<TItem>
+		IList<TItem>
 		, CT
 		, Task<TRet>
 	> FnAsy{get;set;}
