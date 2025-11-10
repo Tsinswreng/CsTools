@@ -36,6 +36,11 @@ public static class ExtnIEnumerable{
 		yield break;   // 什么都不 yield，直接结束
 	}
 
+	public static IAsyncEnumerable<T> OrEmpty<T>(this IAsyncEnumerable<T>? z){
+		return z ?? EmptyAsyE<T>();
+	}
+
+
 
 
 
