@@ -114,7 +114,6 @@ public static class ToolUInt128{
 /// <returns></returns>
 	public static UInt128 Low64BaseToUInt128(str base64LittleEnd){
 		UInt128 ans = 0;
-
 		for(var i = 0; i < base64LittleEnd.Length; i++){
 			var c = (u8)base64LittleEnd[i];
 			var bit6 = Low64Base.Char_Num[c];
@@ -125,6 +124,26 @@ public static class ToolUInt128{
 		}
 		return ans;
 	}
+
+	public static bool TryLow64BaseToUInt128(
+		str Base64LittleEnd
+		,out UInt128 R
+	){
+		R = 0;
+		for(var i = 0; i < Base64LittleEnd.Length; i++){
+			var c = (u8)Base64LittleEnd[i];
+			var bit6 = Low64Base.Char_Num[c];
+			if(bit6 > 63){
+				//throw new ArgumentException($"Invalid character in base64 string: {c} at index {i}");
+				R=default;
+				return false;
+			}
+			R = (R << 6) | bit6;
+		}
+		return true;
+	}
+
+
 }
 
 /// <summary>
