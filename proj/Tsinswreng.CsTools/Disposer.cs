@@ -9,7 +9,7 @@ public class DisposableList:IDisposable{
 		List.Add(O);
 		return this;
 	}
-	void IDisposable.Dispose(){
+	public void Dispose(){
 		foreach(var obj in List){
 			if(obj is IDisposable disposable){
 				disposable.Dispose();
