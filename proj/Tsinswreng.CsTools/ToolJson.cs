@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 public static class ToolJson {
+	/// <summary>
+	/// 數字字面量優先i64、不得則f64
+	/// </summary>
+	/// <param name="json"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentException"></exception>
 	public static IDictionary<str, obj?>? JsonStrToDict(str? json) {
 		if(str.IsNullOrEmpty(json)){
 			return null;
