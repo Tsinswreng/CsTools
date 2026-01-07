@@ -4,9 +4,6 @@ using System.Collections;
 
 //TODO 作公共庫 //TODO 把Dict相關操作 獨立作CsDictTools
 public interface IJsonNode{
-	/// <summary>
-	/// IDictionary | IList | IDictionary<str, obj?> | IList<obj?>
-	/// </summary>
 	public obj? ValueObj{get;set;}
 	/// <summary>
 	/// get 取不到旹返null
@@ -29,6 +26,7 @@ public struct JsonNode:IJsonNode{
 	}
 
 	//[Impl]
+	/// IDictionary | IList | IDictionary<str, obj?> | IList<obj?>
 	public obj? ValueObj{get;set;}
 	//[Impl]
 	public IJsonNode? this[int index] {
