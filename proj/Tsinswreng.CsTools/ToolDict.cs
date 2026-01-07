@@ -3,7 +3,7 @@ namespace Tsinswreng.CsTools;
 public static class ToolDict {
 
 	public static bool TryGetValueByPath<K>(
-		IDictionary<K, obj?> Dict
+		this IDictionary<K, obj?> Dict
 		,IList<K> KeyPath
 		,out obj? Got
 	){
@@ -45,10 +45,10 @@ public static class ToolDict {
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <returns>对应路径的值，如果路径不存在，返回 null</returns>
 	public static object? GetValueByPath<K>(
-		IDictionary<K, obj?> Dict
+		this IDictionary<K, obj?> Dict
 		,IList<K> KeyPath
 	){
-		_GetValueByPath(Dict, KeyPath);
+		//_GetValueByPath(Dict, KeyPath);
 		if( TryGetValueByPath(Dict, KeyPath, out var got) ){
 			return got;
 		}
@@ -89,8 +89,8 @@ public static class ToolDict {
 	/// <param name="Dict">嵌套字典</param>
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <param name="Value">要设置的值</param>
-	public static void PutValueByPath<K>(
-		IDictionary<K, object?> Dict
+	public static void SetValueByPath<K>(
+		this IDictionary<K, object?> Dict
 		,IList<K> KeyPath
 		,object? Value
 	)where K:notnull{
@@ -154,8 +154,5 @@ public static class ToolDict {
 		}
 		return mergedDict;
 	}
-
-
-
 
 }
