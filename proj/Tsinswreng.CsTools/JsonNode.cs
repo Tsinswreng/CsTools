@@ -3,6 +3,9 @@ namespace Tsinswreng.CsTools;
 using System.Collections;
 
 //TODO 作公共庫 //TODO 把Dict相關操作 獨立作CsDictTools
+/// <summary>
+/// 亦可作對象代理
+/// </summary>
 public interface IJsonNode{
 	public obj? ValueObj{get;set;}
 	/// <summary>
@@ -10,16 +13,29 @@ public interface IJsonNode{
 	/// </summary>
 	/// <param name="index"></param>
 	/// <returns></returns>
-	public IJsonNode? this[int index] { get; set; }
+	public IJsonNode? this[i32 index] { get; set; }
 	/// <summary>
 	/// get 取不到旹返null
 	/// </summary>
 	/// <param name="prop"></param>
 	/// <returns></returns>
 	public IJsonNode? this[str prop] { get; set; }
+	// public bool CanAdd{get;}
+	// public obj? Add(obj? V);
+	// //public obj? Add(str Key, obj? V); //用this[key]=V
+
+	/// 只針對List
+	public obj? Add(obj? V);
+	public obj? Delete(str Key);
+	/// 後ʹ元素前移、不類js之空洞數組
+	public obj? Delete(i32 Key);
+	public bool IsArray();
+	public bool IsObject();
 }
 
-
+/// <summary>
+/// 嵌套類型只支持 IDict<str, obj?> 或 IList<obj?>、不支持無泛型版本
+/// </summary>
 public struct JsonNode:IJsonNode{
 	public JsonNode(obj? Value){
 		ValueObj = Value;
@@ -31,16 +47,13 @@ public struct JsonNode:IJsonNode{
 	//[Impl]
 	public IJsonNode? this[int index] {
 		get{
-			if(ValueObj is IList l){
-				return new JsonNode(l[index]);
-			}
-			if(ValueObj is IList<obj?> l2){
+			if(IsList(out var l2)){
 				return new JsonNode(l2[index]);
 			}
 			return null;
 		}
 		set{
-			if(ValueObj is IList l){
+			if(IsList(out var l)){
 				l[index] = value;
 			}
 		}
@@ -48,23 +61,69 @@ public struct JsonNode:IJsonNode{
 	//[Impl]
 	public IJsonNode? this[str prop] {
 		get{
-			if(ValueObj is IDictionary d){
-				return new JsonNode(d[prop]);
-			}
-			if(ValueObj is IDictionary<str, obj?> d2){
+			if(IsDict(out var d2)){
 				return new JsonNode(d2[prop]);
 			}
 			return null;
 		}
 		set{
-			if(ValueObj is IDictionary d){
-				d[prop] = value;
-			}
-			if(ValueObj is IDictionary<str, obj?> d2){
+			if(IsDict(out var d2)){
 				d2[prop] = value;
 			}
 		}
 	}
+
+	public bool IsDict(out IDictionary<str, obj?> Dict){
+		Dict = default!;
+		if(ValueObj is IDictionary<str, obj?> d){
+			Dict = d;
+			return true;
+		}
+		return false;
+	}
+
+	public bool IsList(out IList<obj?> List){
+		List = default!;
+		if(ValueObj is IList<obj?> l){
+			List = l;
+			return true;
+		}
+		return false;
+	}
+
+	public bool IsArray(){
+		return IsList(out var _);
+	}
+
+	public bool IsObject(){
+		return IsDict(out var _);
+	}
+
+	public obj? Add(obj? V){
+		if(IsList(out var l)){
+			l.Add(V);
+			return true;
+		}
+		return false;
+	}
+
+
+
+	public obj? Delete(str Key){
+		if(IsDict(out var d)){
+			return d.Remove(Key);
+		}
+		return false;
+	}
+
+	public obj? Delete(i32 Idx){
+		if(IsList(out var l)){
+			l.RemoveAt(Idx);
+			return true;
+		}
+		return false;
+	}
+
 
 	/// <summary>
 	/// 把形如 "foo.bar[0].baz[2].qux" 的路径拆成对象列表：
@@ -128,23 +187,27 @@ public static class ExtnKvNode{
 		return false;
 	}
 	extension(IJsonNode z){
-		public bool IsEndPoint(){
-			if(z.ValueObj is IList l){
-				return l.Count == 0;
-			}
-			if(z.ValueObj is IList<obj?> l2){
-				return l2.Count == 0;
-			}
-			if(z.ValueObj is IDictionary d){
-				return d.Count == 0;
-			}
-			if(z.ValueObj is IDictionary<str, obj?> d2){
-				return d2.Count == 0;
-			}
-			return false;
+		public bool IsScalar(){
+			return !z.IsArray() &&!z.IsObject();
 		}
 
-		public bool TryGetValue(IList<obj> Path, out IJsonNode Value){
+		// public bool IsEndPoint(){
+		// 	if(z.ValueObj is IList l){
+		// 		return l.Count == 0;
+		// 	}
+		// 	if(z.ValueObj is IList<obj?> l2){
+		// 		return l2.Count == 0;
+		// 	}
+		// 	if(z.ValueObj is IDictionary d){
+		// 		return d.Count == 0;
+		// 	}
+		// 	if(z.ValueObj is IDictionary<str, obj?> d2){
+		// 		return d2.Count == 0;
+		// 	}
+		// 	return false;
+		// }
+
+		public bool TryGetNode(IList<obj> Path, out IJsonNode Value){
 			return z.TryGetNodeByPath(Path, out Value);
 		}
 
@@ -172,7 +235,7 @@ public static class ExtnKvNode{
 
 		public bool TryGetValue<T>(IList<obj> Key, out T R){
 			R=default!;
-			if(z.TryGetValue(Key, out var Out)){
+			if(z.TryGetNode(Key, out var Out)){
 				if(Out!.ValueObj is T r){
 					R = r;
 					return true;
@@ -249,16 +312,15 @@ public static class ExtnKvNode{
 			return z.SetNodeByPath(JsonNode.ResolvePath(Path), Node);
 		}
 		public bool SetNodeByPath(IList<obj> Path, IJsonNode Node){
-			Node = default!;
 			if (Path == null || Path.Count == 0) return false;
 
 			IJsonNode cur = z;          // 从当前节点出发
-			for (int i = 0; i < Path.Count; i++){
+			for (int i = 0; i < Path.Count - 1; i++){
 				var seg = Path[i];
 
 				/* 1. 整数下标：访问列表 */
-				if (seg is int idx){
-					if (!cur.TryGetNode(idx, out var tmp) || tmp is not IJsonNode nextIdx)
+				if (seg is int idx2){
+					if (!cur.TryGetNode(idx2, out var tmp) || tmp is not IJsonNode nextIdx)
 						return false;
 					cur = nextIdx;
 				}
@@ -272,7 +334,20 @@ public static class ExtnKvNode{
 				else return false;
 			}
 
-			Node = cur;              // 走到这里说明路径全部解析成功
+			/* 4. 最后一段：设置值 */
+			var lastSeg = Path[Path.Count - 1];
+			if (lastSeg is int idx){
+				if (!cur.TryGetNode(idx, out var tmp) || tmp is not IJsonNode nextIdx)
+					return false;
+				nextIdx.ValueObj = Node.ValueObj;
+			}
+			else if (lastSeg is string key){
+				if (!cur.TryGetNode(key, out var tmp) || tmp is not IJsonNode nextKey)
+					return false;
+				nextKey.ValueObj = Node.ValueObj;
+			}
+			else return false;
+
 			return true;
 		}
 
