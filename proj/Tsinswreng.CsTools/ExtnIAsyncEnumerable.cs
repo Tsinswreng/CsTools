@@ -4,7 +4,14 @@ using System.Runtime.CompilerServices;
 namespace Tsinswreng.CsTools;
 
 public static class ExtnIEnumerable{
-	public static async IAsyncEnumerable<T> FlatAsync<T>(
+	extension<T>(IAsyncEnumerable<T> z){
+		public IAsyncEnumerable<T> Concat(
+			IEnumerable<T> Other
+		){
+			return z.Concat(Other.ToAsyncEnumerable());
+		}
+	}
+	public static async IAsyncEnumerable<T> Flat<T>(
 		this IAsyncEnumerable<Task<T>> z,
 		[EnumeratorCancellation] CT Ct = default
 	){
@@ -12,6 +19,33 @@ public static class ExtnIEnumerable{
 			yield return await task.ConfigureAwait(false);
 		}
 	}
+
+
+	public static async IAsyncEnumerable<T> Flat<T>(
+		this IAsyncEnumerable<IEnumerable<T>> z,
+		[EnumeratorCancellation] CT Ct = default
+	){
+		await foreach (var itbl in z.WithCancellation(Ct)){
+			foreach(var item in itbl){
+				yield return item;
+			}
+		}
+	}
+
+	public static async IAsyncEnumerable<T> Flat<T>(
+		this IAsyncEnumerable<IList<T>> z,
+		[EnumeratorCancellation] CT Ct = default
+	){
+		await foreach (var itbl in z.WithCancellation(Ct)){
+			foreach(var item in itbl){
+				yield return item;
+			}
+		}
+	}
+
+	
+
+
 
 
 }

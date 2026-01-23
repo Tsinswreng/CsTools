@@ -6,6 +6,7 @@ using System.Collections;
 /// <summary>
 /// 亦可作對象代理
 /// </summary>
+/// TODO 遍歷 foreach(var (k,v) in jsonNode){}
 public interface IJsonNode{
 	public obj? ValueObj{get;set;}
 	/// <summary>
@@ -176,17 +177,14 @@ public struct JsonNode:IJsonNode{
 
 }
 
-public static class ExtnKvNode{
-	public static bool IsNull<TSelf>(
-		TSelf? z
-	)where TSelf:IJsonNode
-	{
-		if(z is null || z.ValueObj is null){
-			return true;
-		}
-		return false;
-	}
+public static class ExtnJsonNode{
 	extension(IJsonNode z){
+		public bool IsNull(){
+			if(z is null || z.ValueObj is null){
+				return true;
+			}
+			return false;
+		}
 		public bool IsScalar(){
 			return !z.IsArray() &&!z.IsObject();
 		}

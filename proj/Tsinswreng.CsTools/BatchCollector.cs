@@ -17,7 +17,7 @@ public partial class BatchCollector<TItem, TRet>
 			,CT
 			,Task<TRet>
 		> FnAsy
-		,u64 BatchSize = 0xfff
+		,u64 BatchSize = 100
 	){
 		this.FnAsy = FnAsy;
 		this.BatchSize = BatchSize;
@@ -87,17 +87,43 @@ public partial class BatchCollector<TItem, TRet>
 		//return Ans;
 	}
 
+	public async IAsyncEnumerable<TRet> AddRangeNoNullRtn(
+		IEnumerable<TItem> Items
+		,[EnumeratorCancellation] CT Ct
+	){
+		foreach(var item in Items){
+			var Ret = await Add(item, Ct);
+			if(Ret is null){
+				continue;
+			}
+			yield return Ret;
+		}
+	}
 
-	bool _IsEnd{get;set;} = false;
+	public async IAsyncEnumerable<TRet> AddToEnd(
+		IEnumerable<TItem> Items
+		,[EnumeratorCancellation] CT Ct
+	){
+		var l1 = AddRangeNoNullRtn(Items, Ct);
+		await foreach(var item in l1){
+			yield return item;
+		}
+		if(!IsEnd){
+			var l2 = await End(Ct);
+			yield return l2!;
+		}
+
+	}
+
+	//public bool IsEnd{get;protected set;} = false;
+	public bool IsEnd{
+		get{return UnHandledList.Count == 0;}
+	}
 	public async Task<TRet?> End(
 		CT Ct
 	){
-		if(_IsEnd){return default;}
-		if((u64)UnHandledList.Count > 0){
-			return await Run(Ct);
-		}
-		_IsEnd = true;
-		return default;
+		if(IsEnd){return default;}
+		return await Run(Ct);
 	}
 
 	protected nil Clear(){
@@ -105,7 +131,7 @@ public partial class BatchCollector<TItem, TRet>
 		return NIL;
 	}
 
-	protected async Task<TRet?> Run(
+	protected async Task<TRet> Run(
 		CT Ct
 	){
 		var Ans = await FnAsy(UnHandledList, Ct);
@@ -115,13 +141,13 @@ public partial class BatchCollector<TItem, TRet>
 
 	[Obsolete("Use DisposeAsync")]
 	public void Dispose(){
-		if(!_IsEnd){
+		if(!IsEnd){
 			End(default).Wait();
 		}
 	}
 
 	public async ValueTask DisposeAsync() {
-		if(!_IsEnd){
+		if(!IsEnd){
 			await End(default);
 		}
 	}
