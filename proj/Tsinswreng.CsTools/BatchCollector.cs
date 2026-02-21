@@ -2,29 +2,61 @@ using System.Runtime.CompilerServices;
 namespace Tsinswreng.CsTools;
 
 
-/// <summary>
-/// 恐非線程安全
+
+/// 線程安全?
 /// 攢夠定ʹ量ʹ批次ⁿ後發
-/// </summary>
-/// <typeparam name="TItem"></typeparam>
-/// <typeparam name="TRet"></typeparam>
 public partial class BatchCollector<TItem, TRet>
 	//:IDisposable
 	:IAsyncDisposable
 {
-	public BatchCollector(Func<
+	public static u64 DfltBatchSize{get;set;} = 100;
+
+	public BatchCollector(){}
+	public BatchCollector(
+		Func<
 			IList<TItem>
 			,CT
 			,Task<TRet>
 		> FnAsy
-		,u64 BatchSize = 100
+		,u64 BatchSize = 0
 	){
+		if(BatchSize == 0){
+			BatchSize = DfltBatchSize;
+		}
+		Init(FnAsy, BatchSize);
+	}
+	protected void Init(
+		Func<
+			IList<TItem>
+			,CT
+			,Task<TRet>
+		> FnAsy
+		,u64 BatchSize = 0
+	){
+		if(BatchSize == 0){
+			BatchSize = DfltBatchSize;
+		}
 		this.FnAsy = FnAsy;
 		this.BatchSize = BatchSize;
 	}
+	public static BatchCollector<TItem, TRet> Mk(
+		Func<
+			IList<TItem>
+			,CT
+			,Task<TRet>
+		> FnAsy
+		,u64 BatchSize = 0
+	){
+		if(BatchSize == 0){
+			BatchSize = DfltBatchSize;
+		}
+		var R = new BatchCollector<TItem, TRet>();
+		R.Init(FnAsy, BatchSize);
+		return R;
+	}
 	//public IList<TItem> FullList{get;set;} = new List<TItem>();
 	public IList<TItem> UnHandledList{get;set;} = new List<TItem>();
-	public u64 BatchSize{get;set;} = 0xfff;
+	public u64 BatchSize{get;set;} = DfltBatchSize;
 	public Func<
 		IList<TItem>
 		, CT
@@ -66,14 +98,10 @@ public partial class BatchCollector<TItem, TRet>
 		return NIL;
 	}
 
-/// <summary>
+
 /// 慎用。優先用AddMany
 /// 如await NeoLearns.AddRangeAsy(NeoPoLearns, Ct).ToListAsync(Ct);
 /// 當配ToListAsync(Ct)用、勿用.First() 否則只內部foreach只珩一次
-/// </summary>
-/// <param name="items"></param>
-/// <param name="Ct"></param>
-/// <returns></returns>
 	public async IAsyncEnumerable<TRet?> AddRangeAsyE(
 		IEnumerable<TItem> items
 		,[EnumeratorCancellation] CT Ct

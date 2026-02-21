@@ -33,6 +33,17 @@ public static class ExtnIEnumerable{
 	}
 
 	public static async IAsyncEnumerable<T> Flat<T>(
+		this IAsyncEnumerable<IAsyncEnumerable<T>> z,
+		[EnumeratorCancellation] CT Ct = default
+	){
+		await foreach (var itbl in z.WithCancellation(Ct)){
+			await foreach(var item in itbl){
+				yield return item;
+			}
+		}
+	}
+
+	public static async IAsyncEnumerable<T> Flat<T>(
 		this IAsyncEnumerable<IList<T>> z,
 		[EnumeratorCancellation] CT Ct = default
 	){
@@ -43,7 +54,7 @@ public static class ExtnIEnumerable{
 		}
 	}
 
-	
+
 
 
 

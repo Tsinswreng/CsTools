@@ -3,23 +3,14 @@ namespace Tsinswreng.CsTools;
 using System.Collections;
 
 //TODO 作公共庫 //TODO 把Dict相關操作 獨立作CsDictTools
-/// <summary>
+
 /// 亦可作對象代理
-/// </summary>
 /// TODO 遍歷 foreach(var (k,v) in jsonNode){}
 public interface IJsonNode{
 	public obj? ValueObj{get;set;}
-	/// <summary>
 	/// get 取不到旹返null
-	/// </summary>
-	/// <param name="index"></param>
-	/// <returns></returns>
 	public IJsonNode? this[i32 index] { get; set; }
-	/// <summary>
 	/// get 取不到旹返null
-	/// </summary>
-	/// <param name="prop"></param>
-	/// <returns></returns>
 	public IJsonNode? this[str prop] { get; set; }
 	// public bool CanAdd{get;}
 	// public obj? Add(obj? V);
@@ -34,9 +25,7 @@ public interface IJsonNode{
 	public bool IsObject();
 }
 
-/// <summary>
 /// 嵌套類型只支持 IDict<str, obj?> 或 IList<obj?>、不支持無泛型版本
-/// </summary>
 public struct JsonNode:IJsonNode{
 	public JsonNode(obj? Value){
 		ValueObj = Value;
@@ -126,10 +115,9 @@ public struct JsonNode:IJsonNode{
 	}
 
 
-	/// <summary>
+
 	/// 把形如 "foo.bar[0].baz[2].qux" 的路径拆成对象列表：
 	/// ["foo", "bar", 0, "baz", 2, "qux"]
-	/// </summary>
 	public static IList<object> ResolvePath(string Path){
 		if (Path == null){
 			throw new ArgumentNullException(nameof(Path));
