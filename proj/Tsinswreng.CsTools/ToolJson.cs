@@ -7,13 +7,10 @@ using System.Collections.Generic;
 using System.Text.Json;
 
 public static class ToolJson {
-	/// <summary>
 	/// 數字字面量優先i64、不得則f64
-	/// </summary>
-	/// <param name="json"></param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentException"></exception>
+	/// 有序
 	public static IDictionary<str, obj?>? JsonStrToDict(str? json) {
+
 		if(str.IsNullOrEmpty(json)){
 			return null;
 		}
@@ -31,7 +28,7 @@ public static class ToolJson {
 	}
 
 	private static IDictionary<str, obj?> JsonElementToDict(JsonElement element) {
-		var dict = new Dictionary<str, obj?>();
+		var dict = new OrderedDictionary<str, obj?>();
 
 		foreach (var property in element.EnumerateObject()) {
 			dict[property.Name] = ParseJsonElement(property.Value);
