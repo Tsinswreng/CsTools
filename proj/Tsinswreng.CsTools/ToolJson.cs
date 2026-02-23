@@ -4,6 +4,7 @@ namespace Tsinswreng.CsTools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 public static class ToolJson {
@@ -85,11 +86,18 @@ public static class ToolJson {
 	}
 	static str ObjCollectionToJson(obj? obj){
 		using var stream = new System.IO.MemoryStream();
-		using (var writer = new Utf8JsonWriter(stream)){
+		var options = new JsonWriterOptions{
+			Indented = false,
+			SkipValidation = true,
+			Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // 允許原樣輸出
+		};
+		using (var writer = new Utf8JsonWriter(stream, options)){
 			WriteJsonValue(writer, obj);
+			writer.Flush();
 		}
 		return System.Text.Encoding.UTF8.GetString(stream.ToArray());
 	}
+
 
 	private static void WriteJsonValue(Utf8JsonWriter writer, obj? value){
 		if (value == null){
