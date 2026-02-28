@@ -75,9 +75,7 @@ public static class ToolJson {
 		}
 	}
 
-	/// <summary>
 	/// 将嵌套的IDictionary<str, obj?>或IEnumerable<obj?>递归序列化为JSON字符串，兼容AOT编译。
-	/// </summary>
 	public static str DictToJson(IDictionary<str, obj?> Dict){
 		return ObjCollectionToJson(Dict);
 	}
