@@ -76,13 +76,8 @@ public partial class BatchCollector<TItem, TRet>
 		return default;
 	}
 
-/// <summary>
-///
-/// </summary>
-/// <param name="items"></param>
+
 /// <param name="OnRet">返匪0旹break</param>
-/// <param name="Ct"></param>
-/// <returns></returns>
 	public async Task<nil> AddRange(
 		IEnumerable<TItem> items
 		,Func<TRet?, i32>? OnRet
