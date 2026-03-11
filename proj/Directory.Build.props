@@ -6,4 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PublishAot>true</PublishAot>
 	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="../../../Tsinswreng.CsCore/proj/Tsinswreng.CsCore/Tsinswreng.CsCore.csproj" />
+	</ItemGroup>
 </Project>

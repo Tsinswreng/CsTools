@@ -79,11 +79,26 @@ public partial class BatchCollector<TItem, TRet>
 
 /// <param name="OnRet">返匪0旹break</param>
 	public async Task<nil> AddRange(
-		IEnumerable<TItem> items
+		IEnumerable<TItem> Items
 		,Func<TRet?, i32>? OnRet
 		,CT Ct
 	){
-		foreach(var item in items){
+		foreach(var item in Items){
+			var Ret = await Add(item, Ct);
+			var r = OnRet?.Invoke(Ret)??0;
+			if(r != 0){
+				break;
+			}
+		}
+		return NIL;
+	}
+	
+	public async Task<nil> AddRange(
+		IAsyncEnumerable<TItem> Items
+		,Func<TRet?, i32>? OnRet
+		,CT Ct
+	){
+		await foreach(var item in Items){
 			var Ret = await Add(item, Ct);
 			var r = OnRet?.Invoke(Ret)??0;
 			if(r != 0){
@@ -98,11 +113,11 @@ public partial class BatchCollector<TItem, TRet>
 /// 如await NeoLearns.AddRangeAsy(NeoPoLearns, Ct).ToListAsync(Ct);
 /// 當配ToListAsync(Ct)用、勿用.First() 否則只內部foreach只珩一次
 	public async IAsyncEnumerable<TRet?> AddRangeAsyE(
-		IEnumerable<TItem> items
+		IEnumerable<TItem> Items
 		,[EnumeratorCancellation] CT Ct
 	){
 		//var Ans = new List<TRet>();
-		foreach(var item in items){
+		foreach(var item in Items){
 			var Ret = await Add(item, Ct);
 			yield return Ret;
 			//Ans.Add(Ret.Value);
@@ -116,7 +131,20 @@ public partial class BatchCollector<TItem, TRet>
 	){
 		foreach(var item in Items){
 			var Ret = await Add(item, Ct);
-			if(Ret is null){
+			if(Ret is null){//未發送
+				continue;
+			}
+			yield return Ret;
+		}
+	}
+	
+	public async IAsyncEnumerable<TRet> AddRangeNoNullRtn(
+		IAsyncEnumerable<TItem> Items
+		,[EnumeratorCancellation] CT Ct
+	){
+		await foreach(var item in Items){
+			var Ret = await Add(item, Ct);
+			if(Ret is null){//未發送
 				continue;
 			}
 			yield return Ret;
@@ -135,7 +163,20 @@ public partial class BatchCollector<TItem, TRet>
 			var l2 = await End(Ct);
 			yield return l2!;
 		}
-
+	}
+	
+	public async IAsyncEnumerable<TRet> AddToEnd(
+		IAsyncEnumerable<TItem> Items
+		,[EnumeratorCancellation] CT Ct
+	){
+		var l1 = AddRangeNoNullRtn(Items, Ct);
+		await foreach(var item in l1){
+			yield return item;
+		}
+		if(!IsEnd){
+			var l2 = await End(Ct);
+			yield return l2!;
+		}
 	}
 
 	//public bool IsEnd{get;protected set;} = false;
