@@ -1,5 +1,6 @@
 namespace Tsinswreng.CsTools;
 using System.Buffers.Binary;
+[Obsolete("用CsU128Id下")]
 public static class ToolUInt128{
 
 	public static string ToBase64Url(UInt128 value) {
@@ -29,12 +30,7 @@ public static class ToolUInt128{
 		return BytesToUInt128(bytes.AsSpan());
 	}
 
-/// <summary>
 /// 大端序读取：前8字节为upper，后8字节为lower
-/// </summary>
-/// <param name="bytes"></param>
-/// <returns></returns>
-/// <exception cref="ArgumentException"></exception>
 	public static UInt128 BytesToUInt128(Span<u8> bytes){
 		if (bytes.Length != 16){
 			throw new ArgumentException("Invalid byte length for UInt128");
@@ -52,9 +48,9 @@ public static class ToolUInt128{
 		return R;
 	}
 
-	/// <summary>
+
 	/// 高位在前
-	/// </summary>
+
 	public static nil ToByteSpan(
 		this UInt128 value
 		,ref Span<u8> R
@@ -69,9 +65,9 @@ public static class ToolUInt128{
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 高位在前
-	/// </summary>
+
 	public static Span<u8> ToByteSpan(
 		this UInt128 value
 	){
@@ -80,13 +76,9 @@ public static class ToolUInt128{
 		return R;
 	}
 
-/// <summary>
 /// UInt128轉64進制(不是base64)字串
 /// 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_
 /// 從低位始
-/// </summary>
-/// <param name="num"></param>
-/// <returns></returns>
 	public static str ToLow64Base(UInt128 num){
 		var chars_littleToBig = new List<char>();
 		for(var i = 0;;i++){
@@ -106,12 +98,8 @@ public static class ToolUInt128{
 	}
 
 
-/// <summary>
 /// 64進制(不是base64)字串轉UInt128
 /// 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_
-/// </summary>
-/// <param name="base64LittleEnd"></param>
-/// <returns></returns>
 	public static UInt128 Low64BaseToUInt128(str base64LittleEnd){
 		UInt128 ans = 0;
 		for(var i = 0; i < base64LittleEnd.Length; i++){
@@ -146,10 +134,8 @@ public static class ToolUInt128{
 
 }
 
-/// <summary>
 /// 64進制(不是base64)對照表
 /// 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_
-/// </summary>
 class Low64Base{
 	static List<List<object>> list2d= [
  [(u8)0b000000,(u8)'0']
