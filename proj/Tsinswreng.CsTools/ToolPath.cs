@@ -1,12 +1,12 @@
 namespace Tsinswreng.CsTools;
 
 public  partial class ToolPath {
-	/// <summary>
+	
 	/// ["a", "b", "c"] => "a/b/c"
 	/// ["a/", "b", "c/"] => "a/b/c"
 	/// 首元素.始ʹ位ʸʹ斜槓ˇ不處理
 	/// ["/a", "b", "c"] => "/a/b/c"
-	/// </summary>
+	
 	/// <param name="Segments"></param>
 	/// <returns></returns>
 	public static string SlashTrimEtJoin(IEnumerable<str> Segments) {

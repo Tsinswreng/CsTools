@@ -38,9 +38,9 @@ public static class ToolDict {
 		return current.TryGetValue(lastKey, out Got!);
 	}
 
-	/// <summary>
+	
 	/// 递归获取 Dictionary 中对应路径的值
-	/// </summary>
+	
 	/// <param name="Dict">嵌套字典</param>
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <returns>对应路径的值，如果路径不存在，返回 null</returns>
@@ -83,9 +83,9 @@ public static class ToolDict {
 		return value;
 	}
 
-	/// <summary>
+	
 	/// 递归设置 Dictionary 中对应路径的值，如果路径不存在会自动创建中间嵌套字典
-	/// </summary>
+	
 	/// <param name="Dict">嵌套字典</param>
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <param name="Value">要设置的值</param>
