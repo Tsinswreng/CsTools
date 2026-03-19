@@ -1,38 +1,38 @@
 namespace Tsinswreng.CsTools;
 
 using System.Collections;
+using Tsinswreng.CsCore;
 
 //TODO 作公共庫 //TODO 把Dict相關操作 獨立作CsDictTools
 
 /// 亦可作對象代理
 /// TODO 遍歷 foreach(var (k,v) in jsonNode){}
 public interface IJsonNode{
+	
+	[Doc(@$"should be either `IDictionary<str, obj?>` or `IList<obj?>`")]
 	public obj? ValueObj{get;set;}
 	/// get 取不到旹返null
-	public IJsonNode? this[i32 index] { get; set; }
+	public IJsonNode? this[i32 Index] { get; set; }
 	/// get 取不到旹返null
-	public IJsonNode? this[str prop] { get; set; }
-	// public bool CanAdd{get;}
-	// public obj? Add(obj? V);
-	// //public obj? Add(str Key, obj? V); //用this[key]=V
-
-	/// 只針對List
-	public obj? Add(obj? V);
-	public obj? Delete(str Key);
-	/// 後ʹ元素前移、不類js之空洞數組
-	public obj? Delete(i32 Key);
-	public bool IsArray();
-	public bool IsObject();
+	public IJsonNode? this[str Key] { get; set; }
+	public bool IsList();
+	public bool IsDict();
+	
+	
+	[Doc(@$"only for when {nameof(IsList)}")]
+	public bool Add(obj? V);
+	
+	public bool Delete(str Key);
+	[Doc(@$"後ʹ元素前移、不類js之空洞數組")]
+	public bool Delete(i32 Key);
+	
 }
 
-/// 嵌套類型只支持 IDict<str, obj?> 或 IList<obj?>、不支持無泛型版本
 public struct JsonNode:IJsonNode{
 	public JsonNode(obj? Value){
 		ValueObj = Value;
 	}
-
-	//[Impl]
-	/// IDictionary | IList | IDictionary<str, obj?> | IList<obj?>
+	
 	public obj? ValueObj{get;set;}
 	//[Impl]
 	public IJsonNode? this[int index] {
@@ -81,15 +81,15 @@ public struct JsonNode:IJsonNode{
 		return false;
 	}
 
-	public bool IsArray(){
+	public bool IsList(){
 		return IsList(out var _);
 	}
 
-	public bool IsObject(){
+	public bool IsDict(){
 		return IsDict(out var _);
 	}
 
-	public obj? Add(obj? V){
+	public bool Add(obj? V){
 		if(IsList(out var l)){
 			l.Add(V);
 			return true;
@@ -99,14 +99,14 @@ public struct JsonNode:IJsonNode{
 
 
 
-	public obj? Delete(str Key){
+	public bool Delete(str Key){
 		if(IsDict(out var d)){
 			return d.Remove(Key);
 		}
 		return false;
 	}
 
-	public obj? Delete(i32 Idx){
+	public bool Delete(i32 Idx){
 		if(IsList(out var l)){
 			l.RemoveAt(Idx);
 			return true;
@@ -174,24 +174,8 @@ public static class ExtnJsonNode{
 			return false;
 		}
 		public bool IsScalar(){
-			return !z.IsArray() &&!z.IsObject();
+			return !z.IsList() &&!z.IsDict();
 		}
-
-		// public bool IsEndPoint(){
-		// 	if(z.ValueObj is IList l){
-		// 		return l.Count == 0;
-		// 	}
-		// 	if(z.ValueObj is IList<obj?> l2){
-		// 		return l2.Count == 0;
-		// 	}
-		// 	if(z.ValueObj is IDictionary d){
-		// 		return d.Count == 0;
-		// 	}
-		// 	if(z.ValueObj is IDictionary<str, obj?> d2){
-		// 		return d2.Count == 0;
-		// 	}
-		// 	return false;
-		// }
 
 		public bool TryGetNode(IList<obj> Path, out IJsonNode Value){
 			return z.TryGetNodeByPath(Path, out Value);
