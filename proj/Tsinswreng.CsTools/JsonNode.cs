@@ -11,9 +11,9 @@ public interface IJsonNode{
 	
 	[Doc(@$"should be either `IDictionary<str, obj?>` or `IList<obj?>`")]
 	public obj? ValueObj{get;set;}
-	/// get 取不到旹返null
+	[Doc(@$"get 取不到旹返null")]
 	public IJsonNode? this[i32 Index] { get; set; }
-	/// get 取不到旹返null
+	[Doc(@$"get 取不到旹返null")]
 	public IJsonNode? this[str Key] { get; set; }
 	public bool IsList();
 	public bool IsDict();
