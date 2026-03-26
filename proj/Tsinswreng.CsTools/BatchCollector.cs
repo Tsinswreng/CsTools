@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Tsinswreng.CsCore;
 namespace Tsinswreng.CsTools;
 
 
@@ -165,6 +166,12 @@ public partial class BatchCollector<TItem, TRet>
 		}
 	}
 	
+	[Doc(@$"this will not automatically consumed the itbl.
+	it you just need the {nameof(BatchCollector<,>)}
+	to handle a batch without returning anything,
+	don't forget to call `ToListAsync` for {nameof(IAsyncEnumerable<>)}.
+	Otherwise, the itbl will not be consumed.
+	")]
 	public async IAsyncEnumerable<TRet> AddToEnd(
 		IAsyncEnumerable<TItem> Items
 		,[EnumeratorCancellation] CT Ct
@@ -213,6 +220,44 @@ public partial class BatchCollector<TItem, TRet>
 	public async ValueTask DisposeAsync() {
 		if(!IsEnd){
 			await End(default);
+		}
+	}
+}
+
+
+public static class ExtnBatchCollector{
+	extension<TItem, TRetEle>(BatchCollector<TItem, IAsyncEnumerable<TRetEle>> z){
+		public async IAsyncEnumerable<TRetEle> AllFlat(
+			IEnumerable<TItem> Items
+			,[EnumeratorCancellation]CT Ct
+		){
+			var d2 = z.AddToEnd(Items, Ct);
+			var r = d2.Flat();
+			await foreach(var item in r){
+				yield return item;
+			}
+		}
+		public async IAsyncEnumerable<TRetEle> AllFlat(
+			IAsyncEnumerable<TItem> Items
+			,[EnumeratorCancellation]CT Ct
+		){
+			var d2 = z.AddToEnd(Items, Ct);
+			var r = d2.Flat();
+			await foreach(var item in r){
+				yield return item;
+			}
+		}
+	}
+	extension<TItem, TRetEle>(BatchCollector<TItem, IEnumerable<TRetEle>> z){
+		public async IAsyncEnumerable<TRetEle> AllFlat(
+			IEnumerable<TItem> Items
+			,[EnumeratorCancellation]CT Ct
+		){
+			var d2 = z.AddToEnd(Items, Ct);
+			var r = d2.Flat();
+			await foreach(var item in r){
+				yield return item;
+			}
 		}
 	}
 }
