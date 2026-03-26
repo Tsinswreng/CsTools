@@ -6,6 +6,7 @@ namespace Tsinswreng.CsTools;
 
 /// 線程安全?
 /// 攢夠定ʹ量ʹ批次ⁿ後發
+/// TaskBatcher?
 public partial class BatchCollector<TItem, TRet>
 	//:IDisposable
 	:IAsyncDisposable
@@ -226,6 +227,15 @@ public partial class BatchCollector<TItem, TRet>
 
 
 public static class ExtnBatchCollector{
+	extension<TItem, TRet>(BatchCollector<TItem, TRet> z){
+		public async Task<IList<TRet>> ConsumeAll(
+			IAsyncEnumerable<TItem> Items, CT Ct
+		){
+			//var list = await z.AddToEnd(Items, Ct).ToListAsync(Ct);
+			var list = await z.AddToEnd(Items, Ct).ToListAsync(Ct);
+			return list;
+		}
+	}
 	extension<TItem, TRetEle>(BatchCollector<TItem, IAsyncEnumerable<TRetEle>> z){
 		public async IAsyncEnumerable<TRetEle> AllFlat(
 			IEnumerable<TItem> Items
