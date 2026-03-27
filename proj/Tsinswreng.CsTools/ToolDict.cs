@@ -1,7 +1,6 @@
 namespace Tsinswreng.CsTools;
 
 public static class ToolDict {
-
 	public static bool TryGetValueByPath<K>(
 		this IDictionary<K, obj?> Dict
 		,IList<K> KeyPath

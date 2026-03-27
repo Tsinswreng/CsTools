@@ -6,12 +6,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using Tsinswreng.CsCore;
 
 public static class ToolJson {
 	/// 數字字面量優先i64、不得則f64
 	/// 有序
+	[Doc(@$"for number in json, prioity: i64 > f64
+	keys should be ordered as original json keys.
+	only support json object or `null`. if it is not, exception will be thrown.
+	")]
 	public static IDictionary<str, obj?>? JsonStrToDict(str? json) {
-
 		if(str.IsNullOrEmpty(json)){
 			return null;
 		}
