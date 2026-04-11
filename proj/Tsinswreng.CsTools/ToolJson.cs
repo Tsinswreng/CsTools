@@ -4,6 +4,7 @@ namespace Tsinswreng.CsTools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Tsinswreng.CsCore;
@@ -15,6 +16,7 @@ public static class ToolJson {
 	keys should be ordered as original json keys.
 	only support json object or `null`. if it is not, exception will be thrown.
 	")]
+	[Pure]
 	public static IDictionary<str, obj?>? JsonStrToDict(str? json) {
 		if(str.IsNullOrEmpty(json)){
 			return null;
@@ -83,7 +85,7 @@ public static class ToolJson {
 	public static str DictToJson(IDictionary<str, obj?> Dict){
 		return ObjCollectionToJson(Dict);
 	}
-	public static str EnumrbToJson(IEnumerable IEnumrb){
+	public static str ItblToJson(IEnumerable IEnumrb){
 		return ObjCollectionToJson(IEnumrb);
 	}
 	static str ObjCollectionToJson(obj? obj){

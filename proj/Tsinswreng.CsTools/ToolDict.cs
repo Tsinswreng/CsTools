@@ -39,7 +39,6 @@ public static class ToolDict {
 
 	
 	/// 递归获取 Dictionary 中对应路径的值
-	
 	/// <param name="Dict">嵌套字典</param>
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <returns>对应路径的值，如果路径不存在，返回 null</returns>
@@ -88,13 +87,13 @@ public static class ToolDict {
 	/// <param name="Dict">嵌套字典</param>
 	/// <param name="KeyPath">键路径，比如 ["content", "text"]</param>
 	/// <param name="Value">要设置的值</param>
-	public static void SetValueByPath<K>(
+	public static bool SetValueByPath<K>(
 		this IDictionary<K, object?> Dict
 		,IList<K> KeyPath
 		,object? Value
 	)where K:notnull{
 		if (Dict == null || KeyPath == null || KeyPath.Count == 0){
-			return;
+			return false;
 		}
 
 		var current = Dict;
@@ -114,6 +113,7 @@ public static class ToolDict {
 
 		var lastKey = KeyPath[KeyPath.Count - 1];
 		current[lastKey] = Value;
+		return true;
 	}
 
 
