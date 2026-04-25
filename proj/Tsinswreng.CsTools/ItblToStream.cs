@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Tsinswreng.CsTools;
-public class ItblToStream<T>{
-	public ItblToStream(Func<T, byte[]> FnToBytes){
+
+[Obsolete]
+public class ItblToStreamOld<T>{
+	public ItblToStreamOld(Func<T, byte[]> FnToBytes){
 		this.FnToBytes = FnToBytes;
 	}
 	public Func<T, byte[]> FnToBytes{get;set;}
@@ -12,7 +14,7 @@ public class ItblToStream<T>{
 		if(AsyE is null){
 			throw new ArgumentNullException(nameof(AsyE));
 		}
-		var ms = new MemoryStream();
+		var ms = new MemoryStream();//TODO 會撐爆內存 不符合代碼規範
 		var enumerator = AsyE.GetAsyncEnumerator(Ct);
 		try{
 			while(enumerator.MoveNextAsync().AsTask().GetAwaiter().GetResult()){

@@ -4,7 +4,7 @@ using Tsinswreng.CsTreeTest;
 namespace Tsinswreng.CsTools.Test.ItblToStreamCases;
 
 /// <summary>
-/// Cases for <see cref="Tsinswreng.CsTools.ItblToStream{T}.ToStream(IAsyncEnumerable{T}, CancellationToken)"/>.
+/// Cases for <see cref="Tsinswreng.CsTools.ItblToStreamOld{T}.ToStream(IAsyncEnumerable{T}, CancellationToken)"/>.
 /// </summary>
 public partial class TestItblToStream {
 	/// <summary>
@@ -14,14 +14,14 @@ public partial class TestItblToStream {
 	public void RegisterToStreamFromAsyncEnumerable(ITestNode Node) {
 		var register = Node.MkTestFnRegister(
 			typeof(TestItblToStream),
-			[typeof(Tsinswreng.CsTools.ItblToStream<string>)],
-			[nameof(Tsinswreng.CsTools.ItblToStream<string>.ToStream)],
+			[typeof(Tsinswreng.CsTools.ItblToStreamOld<string>)],
+			[nameof(Tsinswreng.CsTools.ItblToStreamOld<string>.ToStream)],
 			"ToStream(AsyncEnumerable):"
 		);
 		var r = register.Register;
 
 		r("concatenates async bytes in source order", async _ => {
-			var sut = new Tsinswreng.CsTools.ItblToStream<string>(Encoding.UTF8.GetBytes);
+			var sut = new Tsinswreng.CsTools.ItblToStreamOld<string>(Encoding.UTF8.GetBytes);
 			using var stream = sut.ToStream(GetInput(), CancellationToken.None);
 			var actual = ReadAllText(stream);
 			AssertEqual("x中y", actual, "ToStreamAsyncEnumerable/concatenate");
