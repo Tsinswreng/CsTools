@@ -4,7 +4,7 @@ using Tsinswreng.CsTreeTest;
 namespace Tsinswreng.CsTools.Test.ItblToStreamCases;
 
 /// <summary>
-/// Main tester for <see cref="Tsinswreng.CsTools.ItblToStreamOld{T}"/>.
+/// Main tester for <see cref="Tsinswreng.CsTools.ItblToStream{T}"/>.
 /// Each partial file below covers one overload.
 /// </summary>
 public partial class TestItblToStream : ITester {
@@ -45,4 +45,3 @@ public partial class TestItblToStream : ITester {
 		}
 	}
 }
-
