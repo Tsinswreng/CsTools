@@ -3,7 +3,7 @@ using Tsinswreng.CsTreeTest;
 namespace Tsinswreng.CsTools.Test.GZipLinesCases;
 
 /// <summary>
-/// Cases for <see cref="Tsinswreng.CsTools.GZipLinesUtf8.ToStream(IEnumerable{string}, CancellationToken)"/>.
+/// Cases for <see cref="Tsinswreng.CsTools.GZipLinesUtf8.ToStream(IEnumerable{string})"/>.
 /// </summary>
 public partial class TestGZipLinesUtf8 {
 	/// <summary>
@@ -21,11 +21,10 @@ public partial class TestGZipLinesUtf8 {
 
 		r("gzip content equals newline-joined input", async _ => {
 			var lines = new[] { "alpha", "中", "omega" };
-			using var stream = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(lines, CancellationToken.None);
+			using var stream = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(lines);
 			var actual = DecompressToString(stream);
 			AssertEqual("alpha\n中\nomega", actual, "ToStreamEnumerable/join-with-lf");
 			return null;
 		});
 	}
 }
-

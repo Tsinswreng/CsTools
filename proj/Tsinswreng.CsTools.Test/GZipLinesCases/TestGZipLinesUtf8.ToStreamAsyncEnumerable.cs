@@ -20,7 +20,7 @@ public partial class TestGZipLinesUtf8 {
 		var r = register.Register;
 
 		r("gzip content equals newline-joined async input", async _ => {
-			using var stream = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(GetLines(), CancellationToken.None);
+			using var stream = await Tsinswreng.CsTools.GZipLinesUtf8.ToStream(GetLines(), CancellationToken.None);
 			var actual = DecompressToString(stream);
 			AssertEqual("l1\n第二行\nl3", actual, "ToStreamAsyncEnumerable/join-with-lf");
 			return null;
@@ -39,4 +39,3 @@ public partial class TestGZipLinesUtf8 {
 		yield return "l3";
 	}
 }
-

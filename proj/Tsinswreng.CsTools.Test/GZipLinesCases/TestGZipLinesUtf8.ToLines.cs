@@ -21,7 +21,7 @@ public partial class TestGZipLinesUtf8 {
 
 		r("decompresses back to original lines", (FnTest)(async _ => {
 			var source = new[] { "a", "中", "c" };
-			using var compressed = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(source, CancellationToken.None);
+			using var compressed = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(source);
 			var actual = new List<string>();
 			await foreach(var line in Tsinswreng.CsTools.GZipLinesUtf8.ToLines(compressed, CancellationToken.None)) {
 				actual.Add(line);
@@ -31,4 +31,3 @@ public partial class TestGZipLinesUtf8 {
 		}));
 	}
 }
-

@@ -20,7 +20,7 @@ public partial class GZipLinesUtf8 {
 		IEnumerable<str> Lines
 	);
 	
-	public static IAsyncEnumerable<str> ToLines(
+	public static partial IAsyncEnumerable<str> ToLines(
 		Stream Stream, CT Ct
 	);
 	
