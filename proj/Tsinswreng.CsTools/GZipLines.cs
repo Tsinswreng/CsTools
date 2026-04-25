@@ -7,23 +7,20 @@ using Tsinswreng.CsCore;
 
 namespace Tsinswreng.CsTools;
 
-[Doc(@$"
-Stream's whole content is equivalent to
-`str.Join(Lines, '\n').GZip()`
-")]
+
 public class GZipLinesUtf8 {
 	/// Compress UTF-8 lines as one gzip stream, equivalent to joining lines with '\n' then gzip.
 	/// <param name="Lines">Input lines.</param>
 	/// <param name="Ct">Cancellation token.</param>
 	/// <returns>Readable stream positioned at 0.</returns>
-	public static Stream ToStream(
+	public static Task<Stream> ToStream(
 		IAsyncEnumerable<str> Lines, CT Ct
 	) {
 		if(Lines is null) {
 			throw new ArgumentNullException(nameof(Lines));
 		}
 
-		var output = new MemoryStream();
+		var output = new MemoryStream();//TODO: 不應用 MemoryStream
 		using(var gzip = new GZipStream(output, CompressionLevel.Optimal, leaveOpen: true))
 		using(var writer = new StreamWriter(gzip, new UTF8Encoding(false), leaveOpen: true)) {
 			var e = Lines.GetAsyncEnumerator(Ct);

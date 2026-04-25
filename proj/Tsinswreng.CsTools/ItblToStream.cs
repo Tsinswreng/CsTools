@@ -5,23 +5,17 @@ using System.Threading.Tasks;
 
 namespace Tsinswreng.CsTools;
 
-/// <summary>
 /// 把可迭代元素流式轉成可讀取的 <see cref="Stream"/>。
 /// 不在內存中一次性聚合全部字節。
-/// </summary>
 /// <typeparam name="T">源元素類型。</typeparam>
 public partial class ItblToStream<T>{
-	/// <summary>
 	/// 建立轉換器。
-	/// </summary>
 	/// <param name="FnToBytes">把單個元素轉成字節塊的函數。</param>
 	public ItblToStream(Func<T, ReadOnlyMemory<byte>> FnToBytes){
 		this.FnToBytes = FnToBytes ?? throw new ArgumentNullException(nameof(FnToBytes));
 	}
 
-	/// <summary>
 	/// 把異步可迭代源轉成流式讀取的 <see cref="Stream"/>。
-	/// </summary>
 	/// <param name="AsyE">異步源。</param>
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>僅可讀、不支持 seek 的流。</returns>
@@ -47,9 +41,7 @@ public partial class ItblToStream<T>{
 		}
 	}
 
-	/// <summary>
 	/// 把同步可迭代源轉成流式讀取的 <see cref="Stream"/>。
-	/// </summary>
 	/// <param name="Itbl">同步源。</param>
 	/// <returns>僅可讀、不支持 seek 的流。</returns>
 	public partial Stream ToStream(IEnumerable<T> Itbl){
@@ -59,9 +51,7 @@ public partial class ItblToStream<T>{
 		return new EnumerableReadStream(Itbl.GetEnumerator(), FnToBytes);
 	}
 
-	/// <summary>
 	/// 從異步枚舉器取下一個非空字節塊；若無更多元素則返回空。
-	/// </summary>
 	/// <param name="Enumerator">異步枚舉器。</param>
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>下一個可讀取的字節塊；無數據則為空 memory。</returns>
@@ -81,9 +71,7 @@ public partial class ItblToStream<T>{
 		return ReadOnlyMemory<byte>.Empty;
 	}
 
-	/// <summary>
 	/// 對同步 <see cref="IEnumerable{T}"/> 的流式讀取器。
-	/// </summary>
 	private sealed class EnumerableReadStream:Stream{
 		private readonly IEnumerator<T> _enumerator;
 		private readonly Func<T, ReadOnlyMemory<byte>> _fnToBytes;
@@ -92,9 +80,7 @@ public partial class ItblToStream<T>{
 		private bool _sourceEnded = false;
 		private bool _disposed = false;
 
-		/// <summary>
 		/// 建立同步源讀取流。
-		/// </summary>
 		/// <param name="Enumerator">同步枚舉器。</param>
 		/// <param name="FnToBytes">元素轉字節函數。</param>
 		public EnumerableReadStream(
@@ -218,9 +204,7 @@ public partial class ItblToStream<T>{
 		}
 	}
 
-	/// <summary>
 	/// 對異步 <see cref="IAsyncEnumerable{T}"/> 的流式讀取器。
-	/// </summary>
 	private sealed class AsyncEnumerableReadStream:Stream{
 		private readonly IAsyncEnumerator<T> _enumerator;
 		private readonly Func<T, ReadOnlyMemory<byte>> _fnToBytes;
@@ -230,9 +214,7 @@ public partial class ItblToStream<T>{
 		private bool _sourceEnded = false;
 		private bool _disposed = false;
 
-		/// <summary>
 		/// 建立異步源讀取流。
-		/// </summary>
 		/// <param name="Enumerator">異步枚舉器。</param>
 		/// <param name="FnToBytes">元素轉字節函數。</param>
 		/// <param name="FirstChunk">預讀到的首塊；可為空。</param>

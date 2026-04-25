@@ -19,7 +19,7 @@ public partial class TestGZipLinesUtf8 {
 		);
 		var r = register.Register;
 
-		r("decompresses back to original lines", async _ => {
+		r("decompresses back to original lines", (FnTest)(async _ => {
 			var source = new[] { "a", "中", "c" };
 			using var compressed = Tsinswreng.CsTools.GZipLinesUtf8.ToStream(source, CancellationToken.None);
 			var actual = new List<string>();
@@ -28,7 +28,7 @@ public partial class TestGZipLinesUtf8 {
 			}
 			AssertSequenceEqual(source, actual, "ToLines/decompresses-back");
 			return null;
-		});
+		}));
 	}
 }
 
