@@ -104,8 +104,8 @@ public static class ToolUInt128{
 		UInt128 ans = 0;
 		for(var i = 0; i < base64LittleEnd.Length; i++){
 			var c = (u8)base64LittleEnd[i];
-			var bit6 = Low64Base.Char_Num[c];
-			if(bit6 > 63){
+			// 非法字符要轉成顯式參數錯誤、不能讓字典索引先拋 KeyNotFoundException。
+			if(!Low64Base.Char_Num.TryGetValue(c, out var bit6) || bit6 > 63){
 				throw new ArgumentException($"Invalid character in base64 string: {c} at index {i}");
 			}
 			ans = (ans << 6) | bit6;
@@ -120,9 +120,8 @@ public static class ToolUInt128{
 		R = 0;
 		for(var i = 0; i < Base64LittleEnd.Length; i++){
 			var c = (u8)Base64LittleEnd[i];
-			var bit6 = Low64Base.Char_Num[c];
-			if(bit6 > 63){
-				//throw new ArgumentException($"Invalid character in base64 string: {c} at index {i}");
+			// TryParse 語義下，遇到任何不在 64 進制字母表內的字符都直接返回 false。
+			if(!Low64Base.Char_Num.TryGetValue(c, out var bit6) || bit6 > 63){
 				R=default;
 				return false;
 			}
