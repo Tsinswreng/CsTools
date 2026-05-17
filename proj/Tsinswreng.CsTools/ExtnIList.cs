@@ -27,27 +27,6 @@ public static class ExtnIList{
 		return NIL;
 	}
 
-	public static IList<T> Repeat<T>(
-		T Value
-		,u64 Count
-	){
-		var R = new List<T>();
-		for(u64 i = 0; i < Count; i++){
-			R.Add(Value);
-		}
-		return R;
-	}
-
-	public static IList<T> Repeat<T>(
-		Func<T> ValueMkr
-		,u64 Count
-	){
-		var R = new List<T>();
-		for(u64 i = 0; i < Count; i++){
-			R.Add(ValueMkr());
-		}
-		return R;
-	}
 
 
 }

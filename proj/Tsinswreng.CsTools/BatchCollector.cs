@@ -2,8 +2,6 @@ using System.Runtime.CompilerServices;
 using Tsinswreng.CsCore;
 namespace Tsinswreng.CsTools;
 
-
-
 /// 線程安全?
 /// 攢夠定ʹ量ʹ批次ⁿ後發
 /// TaskBatcher?

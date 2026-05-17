@@ -54,9 +54,4 @@ public static class ExtnIEnumerable{
 		}
 	}
 
-
-
-
-
-
 }

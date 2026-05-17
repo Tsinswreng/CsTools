@@ -1,12 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
+		<PackageId>Tsinswreng.CsTools</PackageId>
+		<Version>0.0.1-alpha</Version>
+		<Authors>Tsinswreng</Authors>
+		<Description>General-purpose C# utility helpers for files, paths, JSON, collections, async streams, and more.</Description>
+		<PackageTags>Utilities;JSON;Path;Collections;Async</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- <Compile Include="../Tsinswreng.CsTypeAlias/TypeAlias.cs" /> -->
 		<Compile Include="../TypeAlias.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
